@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ p.name }} — {{ p.title }}</title>
+    <meta name="description" content="{{ p.tagline }}">
+    <meta property="og:title" content="{{ p.name }} — {{ p.title }}">
+    <meta property="og:description" content="{{ p.tagline }}">
+    <meta property="og:type" content="profile">
+    <meta property="og:image" content="{{ url_for('static', filename=p.photo, _external=True) }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <span class="preloader-mark">SC</span>
+            <span class="preloader-bar"><i></i></span>
+        </div>
+    </div>
+
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+
+    <div class="bg-decor" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar" id="navbar">
+        <a href="#hero" class="brand">
+            <span class="brand-mark">SC</span>
+            <span class="brand-name">Sandeep<span class="brand-dot">.</span>Chavan</span>
+        </a>
+        <nav class="nav-links" id="nav-links">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#education" class="nav-link">Education</a>
+            <a href="#contact" class="nav-link btn-nav">Contact Me</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="hero">
+        <div class="hero-inner">
+            <span class="availability reveal"><span class="pulse-dot"></span> Open to opportunities</span>
+            <p class="hero-eyebrow reveal">Data Analytics · SCADA · Automation</p>
+            <h1 class="hero-name reveal">
+                {{ p.first_name }} <span class="gradient-text">Chavan</span>
+            </h1>
+            <div class="hero-type-wrap reveal">
+                <span class="hero-type" id="typewriter"></span><span class="caret"></span>
+            </div>
+            <p class="hero-sub reveal">{{ p.summary_1 }}</p>
+            <div class="hero-actions reveal">
+                <a href="#projects" class="btn btn-primary">
+                    Explore My Work <span class="btn-arrow">→</span>
+                </a>
+                <a href="{{ url_for('static', filename='files/Sandeep_Chavan_Resume.pdf') }}" download class="btn btn-ghost">
+                    Download Resume <span class="btn-arrow">↓</span>
+                </a>
+                <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+            </div>
+            <div class="hero-contact reveal">
+                <a href="tel:{{ p.phone_raw }}">{{ p.phone }}</a>
+                <span class="sep">•</span>
+                <a href="mailto:{{ p.email }}">{{ p.email }}</a>
+                <span class="sep">•</span>
+                <a href="{{ p.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+        </div>
+
+        <div class="stats reveal" id="stats">
+            {% for s in p.stats %}
+            <div class="stat">
+                <span class="stat-value" data-target="{{ s.value }}" data-suffix="{{ s.suffix }}">0</span>
+                <span class="stat-label">{{ s.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="#about" class="scroll-hint" aria-label="Scroll down">
+            <span class="mouse"><span class="wheel"></span></span>
+        </a>
+    </section>
+
+    <!-- ================= MARQUEE ================= -->
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+            {% for i in range(2) %}
+            <div class="marquee-group">
+                {% for skill in p.skills %}{% for t in skill.tech %}
+                <span class="marquee-item">{{ t }} <em>◆</em></span>
+                {% endfor %}{% endfor %}
+                <span class="marquee-item">SCADA <em>◆</em></span>
+                <span class="marquee-item">MIS Reporting <em>◆</em></span>
+                <span class="marquee-item">Anomaly Detection <em>◆</em></span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ================= ABOUT ================= -->
+    <section class="section" id="about">
+        <div class="section-head reveal">
+            <span class="section-tag">Who I Am</span>
+            <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text reveal reveal-left">
+                <p>{{ p.summary_1 }}</p>
+                <p>{{ p.summary_2 }}</p>
+                <div class="about-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Location</span>
+                        <span class="meta-value">{{ p.location }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Date of Birth</span>
+                        <span class="meta-value">{{ p.personal.dob }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Marital Status</span>
+                        <span class="meta-value">{{ p.personal.marital }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-card reveal" data-tilt>
+                <div class="card-inner">
+                    <div class="avatar-gradient">
+                        <img class="avatar-img" src="{{ url_for('static', filename=p.photo) }}" alt="Portrait of {{ p.name }}" loading="lazy">
+                    </div>
+                    <h3 class="card-name">{{ p.name }}</h3>
+                    <p class="card-role">{{ p.title }}</p>
+                    <div class="card-divider"></div>
+                    <a class="card-link" href="{{ p.scada_project }}" target="_blank" rel="noopener">
+                        🌐 SCADA Project — Live Platform
+                    </a>
+                    <div class="card-actions">
+                        <a class="chip chip-sm" href="mailto:{{ p.email }}">Email</a>
+                        <a class="chip chip-sm" href="{{ p.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+                        <a class="chip chip-sm" href="tel:{{ p.phone_raw }}">Call</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section class="section" id="services">
+        <div class="section-head reveal">
+            <span class="section-tag">What I Do</span>
+            <h2 class="section-title">Services & <span class="gradient-text">Expertise</span></h2>
+        </div>
+        <div class="services-grid">
+            {% for service in p.services %}
+            <div class="service-card glass spotlight reveal" data-tilt>
+                <div class="service-icon">{{ service.icon }}</div>
+                <h3 class="service-title">{{ service.title }}</h3>
+                <p class="service-desc">{{ service.description }}</p>
+                <span class="service-num">0{{ loop.index }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section class="section" id="skills">
+        <div class="section-head reveal">
+            <span class="section-tag">What I Use</span>
+            <h2 class="section-title">Technical <span class="gradient-text">Skills</span></h2>
+        </div>
+        <div class="skills-grid">
+            {% for skill in p.skills %}
+            <div class="skill-card glass reveal" data-tilt>
+                <div class="skill-icon">{{ skill.icon }}</div>
+                <h3 class="skill-category">{{ skill.category }}</h3>
+                <div class="skill-chips">
+                    {% for item in skill.tech %}
+                    <span class="skill-chip">{{ item }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= EXPERIENCE ================= -->
+    <section class="section" id="experience">
+        <div class="section-head reveal">
+            <span class="section-tag">My Journey</span>
+            <h2 class="section-title">Professional <span class="gradient-text">Experience</span></h2>
+        </div>
+        <div class="timeline">
+            {% for job in p.experience %}
+            <div class="timeline-item reveal {% if loop.index is odd %}reveal-left{% else %}reveal-right{% endif %}">
+                <div class="timeline-marker">
+                    <span class="marker-dot{% if job.current %} current{% endif %}"></span>
+                </div>
+                <div class="timeline-card glass">
+                    <div class="timeline-top">
+                        <div class="timeline-titles">
+                            <h3 class="timeline-role">{{ job.role }}</h3>
+                            <p class="timeline-company">{{ job.company }}</p>
+                        </div>
+                        <div class="timeline-meta">
+                            <span class="timeline-period">{{ job.period }}</span>
+                            {% if job.location %}
+                            <span class="timeline-location">{{ job.location }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if job.tag %}
+                    <span class="chip tag">{{ job.tag }}</span>
+                    {% endif %}
+                    <ul class="timeline-points">
+                        {% for pt in job.points %}
+                        <li>{{ pt }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if job.award %}
+                    <div class="award">🏆 {{ job.award }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= PROJECTS ================= -->
+    <section class="section" id="projects">
+        <div class="section-head reveal">
+            <span class="section-tag">Featured Work</span>
+            <h2 class="section-title">Projects & <span class="gradient-text">Platforms</span></h2>
+        </div>
+        <div class="projects-grid">
+            {% for proj in p.projects %}
+            <div class="project-card glass reveal" data-tilt>
+                <div class="project-glow"></div>
+                <div class="project-head">
+                    <span class="project-icon">⚡</span>
+                    {% if proj.external %}
+                    <span class="chip chip-sm">Live ↗</span>
+                    {% endif %}
+                </div>
+                <h3 class="project-title">{{ proj.title }}</h3>
+                <p class="project-desc">{{ proj.description }}</p>
+                <div class="project-tags">
+                    {% for t in proj.tags %}
+                    <span class="skill-chip">{{ t }}</span>
+                    {% endfor %}
+                </div>
+                <a href="{{ proj.link }}" target="_blank" rel="noopener" class="project-link">
+                    {{ proj.link_text }} <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= EDUCATION & CERTIFICATIONS ================= -->
+    <section class="section" id="education">
+        <div class="section-head reveal">
+            <span class="section-tag">Credentials</span>
+            <h2 class="section-title">Education & <span class="gradient-text">Certifications</span></h2>
+        </div>
+        <div class="edu-grid">
+            <div class="edu-column reveal reveal-left">
+                <h3 class="column-title">🎓 Education</h3>
+                {% for edu in p.education %}
+                <div class="edu-card glass">
+                    <div class="edu-top">
+                        <h4 class="edu-degree">{{ edu.degree }}</h4>
+                        <span class="edu-score">{{ edu.score }}</span>
+                    </div>
+                    <p class="edu-institution">{{ edu.institution }}</p>
+                    <span class="chip chip-sm">{{ edu.year }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="edu-column reveal reveal-right">
+                <h3 class="column-title">📜 Certifications</h3>
+                {% for cert in p.certifications %}
+                <div class="cert-card glass">
+                    <span class="cert-icon">{{ cert.icon }}</span>
+                    <div>
+                        <h4 class="cert-title">{{ cert.title }}</h4>
+                        <p class="cert-vendor">{{ cert.vendor }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="section section-contact" id="contact">
+        <div class="contact-card reveal reveal-zoom">
+            <span class="section-tag">Let's Connect</span>
+            <h2 class="section-title contact-title">Have a data challenge? <span class="gradient-text">Let's solve it together.</span></h2>
+            <p class="contact-sub">
+                I'm open to opportunities in data analytics, SCADA systems, automation, and MIS reporting.
+            </p>
+            <div class="contact-actions">
+                <a class="btn btn-primary" href="{{ url_for('static', filename='files/Sandeep_Chavan_Resume.pdf') }}" download>📄 Download Resume</a>
+                <a class="btn btn-ghost" href="mailto:{{ p.email }}">✉️ {{ p.email }}</a>
+                <a class="btn btn-ghost" href="tel:{{ p.phone_raw }}">📞 {{ p.phone }}</a>
+            </div>
+            <div class="contact-links">
+                <a href="{{ p.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="{{ p.scada_project }}" target="_blank" rel="noopener">SCADA Project</a>
+                <a href="{{ p.scada_demo }}" target="_blank" rel="noopener">Demo Walkthrough</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© {{ p.first_name }} {{ p.name.split()[-1] }} — Designed & built with care.</p>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
